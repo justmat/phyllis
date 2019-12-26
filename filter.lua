@@ -9,7 +9,8 @@ local alt = false
 
 
 local function update_fg()
-  fg:edit(params:get("type") == 0 and "lowpass" or "highpass", 12, params:get("freq"), params:get("res"))
+  -- keeps the filter graph current
+  filter:edit(params:get("type") == 0 and "lowpass" or "highpass", 12, params:get("freq"), params:get("res"))
 end
 
 
@@ -32,8 +33,8 @@ function init()
   params:add_control("noise", "noise", controlspec.new(0.0, 1.0, "lin", 0, 0))
   params:set_action("noise", function(v) engine.noise(v * 0.01) end)
   
-  fg = FilterGraph.new()
-  fg:set_position_and_size(5, 5, 118, 35)
+  filter = FilterGraph.new()
+  filter:set_position_and_size(5, 5, 118, 35)
   
   local norns_redraw_timer = metro.init()
   norns_redraw_timer.time = 0.025
@@ -43,6 +44,8 @@ end
 
 
 function key(n, z)
+  -- only key 1 is used
+  -- key1 is momentary alt
   if n == 1 then
     if z == 1 then
       alt = true
@@ -54,9 +57,11 @@ end
 
 
 function enc(n, d)
+  -- enc 1 is navigation
   if n == 1 then
     params:delta("type", d)
   end
+  -- filter controls
   if alt == false then
     if n == 2 then
       params:delta("freq", d)
@@ -64,6 +69,7 @@ function enc(n, d)
       params:delta("res", d)
     end
   else
+    -- alt filter controls
     if n == 2 then
       params:delta("gain", d)
     elseif n == 3 then
