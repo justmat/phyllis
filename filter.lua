@@ -5,7 +5,6 @@
 engine.name = "Filter"
 
 local FilterGraph = require "filtergraph"
-
 local alt = false
 
 
@@ -71,7 +70,6 @@ function enc(n, d)
       params:delta("noise", d)
     end
   end
-  update_fg()
 end
 
 
