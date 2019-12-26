@@ -10,7 +10,8 @@ local alt = false
 
 local function update_fg()
   -- keeps the filter graph current
-  filter:edit(params:get("type") == 0 and "lowpass" or "highpass", 12, params:get("freq"), params:get("res"))
+  local ftype = params:get("type") == 0 and "lowpass" or "highpass"
+  filter:edit(ftype, 12, params:get("freq"), params:get("res"))
 end
 
 
@@ -114,7 +115,7 @@ function redraw()
     screen.text("lp")
   end
   -- filtergraph
-  fg:redraw()
+  filter:redraw()
 
   screen.update()
 end
