@@ -6,7 +6,13 @@ engine.name = "Filter"
 
 local FilterGraph = require "filtergraph"
 
-local g = grid.connect(1)
+local alt = false
+
+
+local function update_fg()
+  fg:edit(params:get("type") == 0 and "lowpass" or "highpass", 12, params:get("freq"), params:get("res"))
+end
+
 
 function init()
   
@@ -28,26 +34,42 @@ function init()
   params:set_action("noise", function(v) engine.noise(v * 0.01) end)
   
   fg = FilterGraph.new()
+  fg:set_position_and_size(5, 5, 118, 35)
   
   local norns_redraw_timer = metro.init()
   norns_redraw_timer.time = 0.025
-  norns_redraw_timer.event = function() redraw() end
+  norns_redraw_timer.event = function() update_fg() redraw() end
   norns_redraw_timer:start()
 end
 
 
-local function update_fg()
-  fg:edit(params:get("type") == 0 and "lowpass" or "highpass", 12, params:get("freq"), params:get("res"))
+function key(n, z)
+  if n == 1 then
+    if z == 1 then
+      alt = true
+    else
+      alt = false
+    end
+  end
 end
 
 
 function enc(n, d)
   if n == 1 then
-    params:delta("gain", d)
-  elseif n == 2 then
-    params:delta("freq", d)
-  elseif n == 3 then
-    params:delta("res", d)
+    params:delta("type", d)
+  end
+  if alt == false then
+    if n == 2 then
+      params:delta("freq", d)
+    elseif n == 3 then
+      params:delta("res", d)
+    end
+  else
+    if n == 2 then
+      params:delta("gain", d)
+    elseif n == 3 then
+      params:delta("noise", d)
+    end
   end
   update_fg()
 end
@@ -56,11 +78,29 @@ end
 
 function redraw()
   screen.clear()
+  screen.level(2)
+  -- freq
+  screen.move(5, 49)
+  screen.text("freq: ")
+  screen.move(30, 49)
+  screen.text(string.format("%.2f", params:get('freq')))
+  -- res
+  screen.move(100, 49)
+  screen.text_right("res: ")
+  screen.move(123, 49)
+  screen.text_right(string.format("%.2f", params:get('res')))
+  -- gain
+  screen.move(5, 59)
+  screen.text("gain: ")
+  screen.move(30, 59)
+  screen.text(string.format("%.2f", params:get('gain')))
+  -- noise
+  screen.move(100, 59)
+  screen.text_right("noise: ")
+  screen.move(123, 59)
+  screen.text_right(string.format("%.2f", params:get('noise')))
+  -- filtergraph
   fg:redraw()
-  screen.level(4)
-  screen.fill()
+
   screen.update()
 end
-
-
-
