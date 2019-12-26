@@ -23,7 +23,7 @@ function init()
   params:add_control("res", "res", controlspec.UNIPOLAR)
   params:set_action("res", function(v) engine.res(v) end)
   
-  params:add_control("gain", "gain", controlspec.AMP)
+  params:add_control("gain", "gain", controlspec.new(0.00, 5.00, "lin", 0.01, 1.00))
   params:set_action("gain", function(v) engine.gain(v) end)
   
   params:add_number("type", "type", 0, 1, 0)
@@ -76,7 +76,7 @@ end
 
 function redraw()
   screen.clear()
-  screen.level(2)
+  screen.level(alt and 2 or 4)
   -- freq
   screen.move(5, 49)
   screen.text("freq: ")
@@ -87,6 +87,7 @@ function redraw()
   screen.text_right("res: ")
   screen.move(123, 49)
   screen.text_right(string.format("%.2f", params:get('res')))
+  screen.level(alt and 4 or 2)
   -- gain
   screen.move(5, 59)
   screen.text("gain: ")
@@ -97,6 +98,15 @@ function redraw()
   screen.text_right("noise: ")
   screen.move(123, 59)
   screen.text_right(string.format("%.2f", params:get('noise')))
+  -- filter type header
+  screen.level(4)
+  if params:get("type") == 1 then
+    screen.move(123, 10)
+    screen.text_right("hp")
+  else
+    screen.move(8, 10)
+    screen.text("lp")
+  end
   -- filtergraph
   fg:redraw()
 
