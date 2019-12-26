@@ -12,7 +12,7 @@ Engine_Filter : CroneEngine {
 
   alloc {
     SynthDef(\Filter, {
-      arg in, out, freq=10000.0, res=0.1, inputGain=1.0, fType=0.0, noiseLevel=0.0003;
+      arg in, out, freq=440.0, res=0.1, inputGain=1.0, fType=0.0, noiseLevel=0.0003;
       
       var sig = {
         DFM1.ar(SoundIn.ar([0, 1]),
