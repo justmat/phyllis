@@ -71,19 +71,20 @@ end
 function init()
   
   screen.aa(1)
-  
+  -- add filter parameters
+  -- freq
   params:add_control("freq", "freq", controlspec.WIDEFREQ)
   params:set_action("freq", function(v) engine.freq(v) end)
-  
+  -- resonance/q
   params:add_control("res", "res", controlspec.UNIPOLAR)
   params:set_action("res", function(v) engine.res(v) end)
-  
+  -- input gain
   params:add_control("gain", "gain", controlspec.new(0.00, 5.00, "lin", 0.01, 1.00))
   params:set_action("gain", function(v) engine.gain(v) end)
-  
+  -- filter type lp/hp
   params:add_number("type", "type", 0, 1, 0)
   params:set_action("type", function(v) engine.type(v) end)
-  
+  -- noise level added to signal
   params:add_control("noise", "noise", controlspec.new(0.0, 1.0, "lin", 0, 0))
   params:set_action("noise", function(v) engine.noise(v * 0.01) end)
   
@@ -96,10 +97,10 @@ function init()
   params:bang()
 
   norns.enc.sens(1, 5)
-  
+  -- setup for the filter graph
   filter = FilterGraph.new()
   filter:set_position_and_size(5, 5, 118, 35)
-  
+  -- redraw metro
   local norns_redraw_timer = metro.init()
   norns_redraw_timer.time = 0.025
   norns_redraw_timer.event = function() update_fg() redraw() end
