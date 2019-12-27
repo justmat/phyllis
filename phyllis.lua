@@ -5,13 +5,46 @@
 engine.name = "Phyllis"
 
 local FilterGraph = require "filtergraph"
+
 local alt = false
+
+local lfo = include("lib/hnds_phyllis")
+local lfo_targets = {
+  "none",
+  "freq",
+  "res",
+  "gain",
+  "noise"
+}
 
 
 local function update_fg()
   -- keeps the filter graph current
   local ftype = params:get("type") == 0 and "lowpass" or "highpass"
   filter:edit(ftype, 12, params:get("freq"), params:get("res"))
+end
+
+
+function lfo.process()
+  -- for lib hnds
+  for i = 1, 4 do
+    local target = params:get(i .. "lfo_target")
+    if params:get(i .. "lfo") == 2 then
+      -- frequency
+      if target == 2 then
+        params:set(lfo_targets[target], lfo.scale(lfo[i].slope, -1.0, 2.0, 0.00, 20000.00))
+      -- resonance/q
+      elseif target == 3 then
+        params:set(lfo_targets[target], lfo.scale(lfo[i].slope, -1.0, 2.0, 0.00, 1.00))
+      -- input gain
+      elseif target == 4 then
+        params:set(lfo_targets[target], lfo.scale(lfo[i].slope, -1.0, 2.0, 0.00, 5.00))
+      -- noise
+      elseif target == 5 then
+        params:set(lfo_targets[target], lfo.scale(lfo[i].slope, -1.0, 2.0, 0.00, 1.00))
+      end
+    end
+  end
 end
 
 
@@ -33,6 +66,16 @@ function init()
   
   params:add_control("noise", "noise", controlspec.new(0.0, 1.0, "lin", 0, 0))
   params:set_action("noise", function(v) engine.noise(v * 0.01) end)
+  
+  -- for hnds
+  for i = 1, 4 do
+    lfo[i].lfo_targets = lfo_targets
+  end
+  lfo.init()
+
+  params:bang()
+
+  norns.enc.sens(1, 5)
   
   filter = FilterGraph.new()
   filter:set_position_and_size(5, 5, 118, 35)
