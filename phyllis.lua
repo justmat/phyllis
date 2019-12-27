@@ -144,7 +144,6 @@ function enc(n, d)
 end
 
 
-
 function redraw()
   screen.clear()
   screen.level(alt and 2 or 4)
