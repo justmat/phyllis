@@ -1,6 +1,26 @@
--- filter
+-- phyllis
 --
--- @justmat
+-- a digitally modeled
+-- analog filter
+--
+-- built around the DFM1
+-- supercollider ugen, and
+-- some softclipping.
+--
+-- ----------
+--
+-- key1 = alt
+-- enc1 = filter type
+--
+-- enc2 = freq
+-- enc3 = resonance
+-- alt + enc2 = input gain
+-- alt + enc3 = noise
+--
+-- ----------
+-- 
+--
+-- v1.0 @justmat
 
 engine.name = "Phyllis"
 
