@@ -1,9 +1,4 @@
 Engine_Phyllis : CroneEngine {
-  var freq;
-  var res;
-  var inputGain;
-  var fType;
-  var noiseLevel;
   var <synth;
   
   *new { arg context, doneCallback;
