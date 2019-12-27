@@ -1,4 +1,4 @@
-Engine_Filter : CroneEngine {
+Engine_Phyllis : CroneEngine {
   var freq;
   var res;
   var inputGain;
