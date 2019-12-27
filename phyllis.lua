@@ -2,7 +2,7 @@
 --
 -- @justmat
 
-engine.name = "Filter"
+engine.name = "Phyllis"
 
 local FilterGraph = require "filtergraph"
 local alt = false
