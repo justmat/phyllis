@@ -29,6 +29,11 @@ local FilterGraph = require "filtergraph"
 
 local alt = false
 
+local held = {}
+for i = 1, 2 do
+  held[i] = {}
+end
+
 local lfo = include("lib/hnds_phyllis")
 local lfo_targets = {
   "none",
@@ -69,6 +74,26 @@ function lfo.process()
 end
 
 
+local function hold(n)
+  -- hold parameter values
+  table.insert(held[n], params:get("freq"))
+  table.insert(held[n], params:get("res"))
+  table.insert(held[n], params:get("gain"))
+  table.insert(held[n], params:get("noise"))
+  table.insert(held[n], params:get("type"))
+end
+
+
+local function restore(n)
+  -- restore parameter values to held values
+  params:set("freq", held[n][1])
+  params:set("res", held[n][2])
+  params:set("gain", held[n][3])
+  params:set("noise", held[n][4])
+  params:set("type", held[n][5])
+end
+
+  
 function init()
   
   screen.aa(1)
@@ -110,13 +135,24 @@ end
 
 
 function key(n, z)
-  -- only key 1 is used
   -- key1 is momentary alt
   if n == 1 then
     if z == 1 then
       alt = true
     else
       alt = false
+    end
+  end
+  -- key2/3 are parameter recalls
+  if alt then
+    if n > 1 and z == 1 then
+      hold(n - 1)
+    end
+  else
+    if n > 1 and z == 1 then
+      if #held[n - 1] > 0 then
+        restore(n - 1)
+      end
     end
   end
 end
