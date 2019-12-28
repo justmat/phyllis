@@ -9,19 +9,22 @@
 --
 -- ----------
 --
--- key1 = alt
--- enc1 = filter type
+-- key1: alt
+-- enc1: filter type
 --
--- enc2 = freq
--- enc3 = resonance
--- alt + enc2 = input gain
--- alt + enc3 = noise
+-- enc2: freq
+-- enc3: resonance
+-- alt + enc2: input gain
+-- alt + enc3: noise
+--
+-- alt + key2/3: set hold values
+-- key2/3: restore held values
 --
 -- ----------
 -- 
 -- llllllll.co/t/27988
 --
--- v1.0 @justmat
+-- v1.1 @justmat
 
 engine.name = "Phyllis"
 
