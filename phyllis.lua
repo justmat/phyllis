@@ -78,6 +78,8 @@ end
 
 
 local function hold(n)
+  -- clear old holds
+  held[n] = {}
   -- hold parameter values
   table.insert(held[n], params:get("freq"))
   table.insert(held[n], params:get("res"))
