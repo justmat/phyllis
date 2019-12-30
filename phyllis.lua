@@ -149,12 +149,10 @@ function key(n, z)
     end
   end
   -- key2/3 are parameter recalls
-  if alt then
-    if n > 1 and z == 1 then
+  if n > 1 and z == 1 then
+    if alt then
       hold(n - 1)
-    end
-  else
-    if n > 1 and z == 1 then
+    else
       if #held[n - 1] > 0 then
         restore(n - 1)
       end
