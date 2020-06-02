@@ -7,10 +7,13 @@ Engine_Phyllis : CroneEngine {
 
   alloc {
     SynthDef(\Filter, {
-      arg in, out, freq=440.0, res=0.1, inputGain=1.0, fType=0.0, noiseLevel=0.0003;
+      arg inL, inR, out, freq=440.0, res=0.1, inputGain=1.0, fType=0.0, noiseLevel=0.0003;
+      var in, sig;
       
-      var sig = {
-        DFM1.ar(SoundIn.ar([0, 1]),
+      in = [In.ar(inL), In.ar(inR)];
+      
+      sig = {
+        DFM1.ar(in,
           freq,
           res,
           inputGain,
@@ -25,6 +28,8 @@ Engine_Phyllis : CroneEngine {
     context.server.sync;
 
     synth = Synth.new(\Filter, [
+      \inL, context.in_b[0].index,			
+			\inR, context.in_b[1].index,
       \out, context.out_b.index],
     context.xg);
 
